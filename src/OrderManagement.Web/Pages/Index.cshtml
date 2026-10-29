@@ -1,0 +1,130 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Order Management";
+}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">SALES OPERATIONS</p>
+        <h1>Order management</h1>
+        <p class="muted">Create, search, and manage customer orders.</p>
+    </div>
+</section>
+
+<div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+<section class="panel" aria-labelledby="create-heading">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">NEW TRANSACTION</p>
+            <h2 id="create-heading">Create an order</h2>
+        </div>
+    </div>
+    <form id="order-form" novalidate>
+        <div class="form-grid">
+            <label>
+                Customer name
+                <input name="customerName" type="text" maxlength="200" required autocomplete="name" />
+                <span class="field-error" data-error-for="customerName"></span>
+            </label>
+            <label>
+                Customer email
+                <input name="customerEmail" type="email" maxlength="320" required autocomplete="email" />
+                <span class="field-error" data-error-for="customerEmail"></span>
+            </label>
+        </div>
+
+        <div class="section-heading items-heading">
+            <h3>Order items</h3>
+            <button id="add-item" class="button button-secondary" type="button">Add item</button>
+        </div>
+        <div id="items" class="item-list" aria-live="polite"></div>
+        <template id="item-template">
+            <div class="item-row">
+                <label>
+                    Product
+                    <input class="item-name" type="text" maxlength="200" required />
+                </label>
+                <label>
+                    Quantity
+                    <input class="item-quantity" type="number" min="1" max="100000" value="1" required />
+                </label>
+                <label>
+                    Unit price
+                    <input class="item-price" type="number" min="0.01" max="100000000" step="0.01" required />
+                </label>
+                <button class="remove-item" type="button" aria-label="Remove item">Remove</button>
+            </div>
+        </template>
+
+        <div class="discount-row">
+            <label>
+                Discount strategy
+                <select id="discount-strategy">
+                    <option value="">No discount</option>
+                </select>
+            </label>
+            <div class="discount-summary" aria-live="polite">
+                <span id="discount-label">Subtotal: $0.00</span>
+                <strong id="discount-total">Total: $0.00</strong>
+            </div>
+        </div>
+        <div id="form-error" class="form-error" role="alert" hidden></div>
+        <div class="form-actions">
+            <button class="button button-primary" type="submit">Create order</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel" aria-labelledby="orders-heading">
+    <div class="section-heading orders-heading">
+        <div>
+            <p class="eyebrow">ORDER HISTORY</p>
+            <h2 id="orders-heading">Orders</h2>
+        </div>
+        <label class="search-control">
+            Search customers
+            <input id="order-search" type="search" placeholder="Name or email" autocomplete="off" />
+        </label>
+    </div>
+    <div class="filters">
+        <label>
+            Sort by
+            <select id="order-sort">
+                <option value="date">Date</option>
+                <option value="customer">Customer</option>
+                <option value="total">Total</option>
+            </select>
+        </label>
+        <label class="checkbox-label">
+            <input id="order-descending" type="checkbox" checked />
+            Descending
+        </label>
+        <span id="result-count" class="muted"></span>
+    </div>
+    <div id="orders-region" aria-live="polite">
+        <div id="orders-list" class="orders-list"></div>
+        <div id="empty-state" class="empty-state" hidden>No orders match your search.</div>
+        <div class="pagination">
+            <button id="previous-page" class="button button-secondary" type="button">Previous</button>
+            <span id="page-label" class="muted"></span>
+            <button id="next-page" class="button button-secondary" type="button">Next</button>
+        </div>
+    </div>
+</section>
+
+<dialog id="delete-dialog" class="confirm-dialog" aria-labelledby="delete-title">
+    <form method="dialog">
+        <h2 id="delete-title">Delete this order?</h2>
+        <p>This action cannot be undone.</p>
+        <div class="form-actions">
+            <button class="button button-secondary" value="cancel">Cancel</button>
+            <button id="confirm-delete" class="button button-danger" type="button">Delete order</button>
+        </div>
+    </form>
+</dialog>
+
+@section Scripts {
+    <script type="module" src="~/js/orders/main.js" asp-append-version="true"></script>
+}
